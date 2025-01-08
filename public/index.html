@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reddit Real-Time Search</title>
+    <link rel="stylesheet" href="style.css"> <!-- Link to external CSS -->
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Reddit Real-Time Search</h1>
+        </header>
+
+        <form id="search-form">
+            <label for="subreddit">Subreddit:</label>
+            <input type="text" id="subreddit" placeholder="e.g., javascript" required>
+            <label for="keywords">Keywords (comma-separated):</label>
+            <input type="text" id="keywords" placeholder="e.g., react, node" required>
+            <button type="submit">Search</button>
+        </form>
+
+        <h2>Posts</h2>
+        <div id="posts-container"></div>
+    </div>
+
+    <script src="https://reddit-realtime-search.onrender.com/socket.io/socket.io.js"></script>
+    <script src="app.js"></script> <!-- Link to external JavaScript -->
+</body>
+</html>
