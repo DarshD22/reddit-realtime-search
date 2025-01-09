@@ -1,126 +1,125 @@
-/* Global Styles */
+/* General Styles */
 body {
-    font-family: 'Helvetica Neue', Arial, sans-serif;
-    background-color: #f7f7f7;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f7fa;
     color: #333;
     margin: 0;
     padding: 0;
-}
-
-/* Container */
-.container {
-    width: 80%;
-    margin: 30px auto;
-    padding: 20px;
+  }
+  
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 30px;
     background-color: #fff;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* Header */
-header {
-    background-color: #FF4500; /* Reddit orange */
-    color: white;
-    padding: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  h1 {
+    color: #ff4500;
     text-align: center;
-    border-radius: 8px;
-    margin-bottom: 30px;
-}
-
-h1 {
-    font-size: 2rem;
-    font-weight: 700;
-}
-
-/* Form Styles */
-form {
+    font-size: 36px;
+    margin-bottom: 20px;
+  }
+  
+  h2 {
+    color: #333;
+    font-size: 24px;
+    margin-top: 30px;
+  }
+  
+  input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+  
+  button {
+    background-color: #ff4500;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  button:hover {
+    background-color: #e03e00;
+  }
+  
+  .subreddit-list, .post-list {
+    margin-top: 20px;
+  }
+  
+  .subreddit, .post {
+    background-color: #fff;
+    padding: 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .subreddit:hover, .post:hover {
+    border-color: #ff4500;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .subreddit.selected {
+    background-color: #ffedd5;
+    border-color: #ff4500;
+  }
+  
+  .subreddit strong, .post strong {
+    font-size: 18px;
+  }
+  
+  .subreddit em, .post em {
+    color: #555;
+    font-size: 14px;
+  }
+  
+  a {
+    color: #ff4500;
+    text-decoration: none;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Search and filter section */
+  .search-section, .filter-section {
     display: flex;
     flex-direction: column;
     gap: 15px;
-    margin-bottom: 30px;
-}
-
-input[type="text"] {
-    padding: 12px;
-    font-size: 1rem;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    width: 100%;
-    margin-top: 5px;
-    background-color: #f7f7f7;
-}
-
-button {
-    padding: 12px;
-    background-color: #FF4500; /* Reddit orange */
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 1.1rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-button:hover {
-    background-color: #E13F00; /* Darker orange */
-}
-
-/* Post Styles */
-.post {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    padding: 15px;
     margin-bottom: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.post h3 {
-    font-size: 1.3rem;
-    color: #0079d3; /* Reddit blue */
+  }
+  
+  input[type="text"], select {
+    width: 100%;
+    padding: 12px;
     margin-bottom: 10px;
-}
-
-.post a {
-    color: #0079d3;
-    text-decoration: none;
-}
-
-.post a:hover {
-    text-decoration: underline;
-}
-
-.post p {
-    color: #555;
-    font-size: 1rem;
-    margin-bottom: 10px;
-}
-
-.post p strong {
-    font-weight: 700;
-}
-
-.loading-message {
-    text-align: center;
-    font-size: 1.2rem;
-    color: #888;
-}
-
-/* Media Queries */
-@media (max-width: 768px) {
-    .container {
-        width: 90%;
-    }
-
-    h1 {
-        font-size: 1.8rem;
-    }
-
-    button {
-        padding: 10px;
-    }
-
-    input[type="text"] {
-        padding: 10px;
-    }
-}
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+  
+  select {
+    padding: 10px;
+  }
+  
+  button {
+    padding: 12px 20px;
+    width: 100%;
+  }
+  
+  button:active {
+    background-color: #e03e00;
+  }
+  

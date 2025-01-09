@@ -1,39 +1,109 @@
-const socket = io.connect('https://reddit-realtime-search.onrender.com');
-const form = document.getElementById('search-form');
-const postsContainer = document.getElementById('posts-container');
+const keywordInput = document.getElementById("keyword");
+const searchSubredditsButton = document.getElementById("search-subreddits");
+const subredditsContainer = document.getElementById("subreddits");
+const postsContainer = document.getElementById("posts");
+const timeFilter = document.getElementById("time-filter");
+const fetchPostsButton = document.getElementById("fetch-posts");
 
-form.addEventListener('submit', (event) => {
-    event.preventDefault();
-    const subreddit = document.getElementById('subreddit').value.trim();
-    const keywords = document.getElementById('keywords').value.split(',').map(kw => kw.trim());
+let selectedSubreddits = [];
 
-    if (!subreddit || keywords.length === 0) {
-        alert('Please enter a subreddit and at least one keyword.');
-        return;
-    }
+searchSubredditsButton.addEventListener("click", async () => {
+  const keyword = keywordInput.value.trim();
+  if (!keyword) {
+    alert("Please enter a keyword!");
+    return;
+  }
 
-    postsContainer.innerHTML = '<p class="loading-message">Loading posts...</p>';
-    socket.emit('subscribe', { subreddit, keywords });
-});
+  // Show loading message
+  subredditsContainer.innerHTML = "Loading subreddits...";
+  selectedSubreddits = []; // Clear previously selected subreddits
+  postsContainer.innerHTML = "No posts loaded yet."; // Clear posts section
 
-socket.on('posts', (posts) => {
-    postsContainer.innerHTML = '';
-    if (posts.length === 0) {
-        postsContainer.innerHTML = '<p>No posts found matching the keywords.</p>';
-        return;
-    }
-
-    posts.forEach(post => {
-        const postDiv = document.createElement('div');
-        postDiv.classList.add('post');
-        postDiv.innerHTML = `
-            <h3><a href="${post.url}" target="_blank">${post.title}</a></h3>
-            <p>${post.selftext}</p>
-            <p><strong>Author:</strong> ${post.author}</p>
-        `;
-        postsContainer.appendChild(postDiv);
+  try {
+    // Fetch matching subreddits from the backend
+    const response = await fetch("https://reddit-realtime-search.onrender.com/search-subreddits", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ keyword }),
     });
+
+    if (!response.ok) throw new Error("Failed to fetch subreddits.");
+
+    const subreddits = await response.json();
+    subredditsContainer.innerHTML = subreddits.length
+      ? subreddits
+          .map(
+            (subreddit) => `
+            <div class="subreddit" data-name="${subreddit.name}">
+              <strong>${subreddit.name}</strong><br>
+              <em>${subreddit.description}</em>
+            </div>
+          `
+          )
+          .join("")
+      : "No subreddits found.";
+
+    // Add click listeners to select subreddits
+    document.querySelectorAll(".subreddit").forEach((element) =>
+      element.addEventListener("click", () => {
+        const subreddit = element.getAttribute("data-name");
+        if (selectedSubreddits.includes(subreddit)) {
+          selectedSubreddits = selectedSubreddits.filter((s) => s !== subreddit);
+          element.classList.remove("selected");
+        } else {
+          selectedSubreddits.push(subreddit);
+          element.classList.add("selected");
+        }
+      })
+    );
+  } catch (error) {
+    subredditsContainer.innerHTML = "Failed to load subreddits. Please try again.";
+    console.error(error);
+  }
 });
 
-socket.on('connect', () => console.log('Connected to server.'));
-socket.on('disconnect', () => console.log('Disconnected from server.'));
+fetchPostsButton.addEventListener("click", async () => {
+  if (!selectedSubreddits.length) {
+    alert("Please select at least one subreddit!");
+    return;
+  }
+
+  const keyword = keywordInput.value.trim();
+  const time = timeFilter.value;
+
+  // Show loading message
+  postsContainer.innerHTML = "Loading posts...";
+
+  try {
+    // Fetch posts from selected subreddits
+    const response = await fetch("https://reddit-realtime-search.onrender.com/search-posts", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        subreddits: selectedSubreddits,
+        keyword,
+        time,
+      }),
+    });
+
+    if (!response.ok) throw new Error("Failed to fetch posts.");
+
+    const posts = await response.json();
+    postsContainer.innerHTML = posts.length
+      ? posts
+          .map(
+            (post) => `
+            <div class="post">
+              <strong>${post.title}</strong> <em>(from r/${post.subreddit})</em><br>
+              <em>by ${post.author} on ${new Date(post.created_utc * 1000).toLocaleString()}</em><br>
+              <a href="${post.url}" target="_blank">Read more</a>
+            </div>
+          `
+          )
+          .join("")
+      : "No posts found.";
+  } catch (error) {
+    postsContainer.innerHTML = "Failed to load posts. Please try again.";
+    console.error(error);
+  }
+});
